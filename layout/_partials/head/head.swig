@@ -2,6 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="{{ theme.android_chrome_color }}"/>
+<meta name="google-site-verification" content="37N3k-QROe3gQuUhiCgmj6mBz0MRzeSNu79UBOwcyMs" />
 
 {% if theme.needmoreshare2.enable %}
   {% set needmoreshare2_css = url_for(theme.vendors._internal + '/needsharebutton/needsharebutton.css') %}
@@ -95,8 +96,8 @@
     scheme: '{{ theme.scheme }}',
     version: '{{ version }}',
     sidebar: {{ theme.sidebar | json_encode }},
-    back2top: {{ theme.back2top.enable }},
-    back2top_sidebar: {{ theme.back2top.sidebar }},
+    back2top: {{ theme.back2top | json_encode }},
+    copycode: {{ theme.codeblock.copy_button | json_encode }},
     fancybox: {{ theme.fancybox }},
     fastclick: {{ theme.fastclick }},
     lazyload: {{ theme.lazyload }},
@@ -108,13 +109,15 @@
       indexName: '{{ theme.algolia.indexName }}',
       hits: {{ theme.algolia_search.hits | json_encode }},
       labels: {{ theme.algolia_search.labels | json_encode }}
+    },
+    translation: {
+      copy_button: '{{__("post.copy_button")}}',
+      copy_success: '{{__("post.copy_success")}}',
+      copy_failure: '{{__("post.copy_failure")}}'
     }
   };
 </script>
 
-{% if theme.custom_file_path.head %}
-  {% set custom_head = '../../../../../' + theme.custom_file_path.head %}
-{% else %}
-  {% set custom_head = '../../_custom/head.swig' %}
-{% endif %}
-{% include custom_head %}
+{% for inject_item in theme.injects.head %}
+  {{ partial(inject_item.layout, inject_item.locals, inject_item.options) }}
+{% endfor %}

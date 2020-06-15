@@ -1,3 +1,4 @@
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="copyright">{#
 #}{% set current = date(Date.now(), "YYYY") %}{#
 #}{% if theme.footer.beian.enable %}{#
@@ -55,8 +56,6 @@
 #}</div>
 {% endif %}
 
-{% if theme.footer.custom_text %}
-  <div class="footer-custom">{#
-  #}{{ theme.footer.custom_text }}{#
-#}</div>
-{% endif %}
+{% for inject_item in theme.injects.footer %}
+  {{ partial(inject_item.layout, inject_item.locals, inject_item.options) }}
+{% endfor %}

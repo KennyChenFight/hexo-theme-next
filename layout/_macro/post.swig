@@ -201,6 +201,12 @@
             </span>
           {% endif %}
 
+          {% for inject_item in theme.injects.postMeta %}
+            <span class="post-meta-item">
+              {{ partial(inject_item.layout, inject_item.locals, inject_item.options) }}
+            </span>
+          {% endfor %}
+
           {% if theme.symbols_count_time.separated_meta %}<br/>{% endif %}
           {% if config.symbols_count_time.symbols %}
             <span class="post-meta-item">
@@ -314,6 +320,12 @@
       {% include '../_partials/post/post-related.swig' with { post: post } %}
     {% endif %}
 
+    {% if not is_index %}
+      {% for inject_item in theme.injects.postBodyEnd %}
+        {{ partial(inject_item.layout, inject_item.locals, inject_item.options) }}
+      {% endfor %}
+    {% endif %}
+
     {#####################}
     {### END POST BODY ###}
     {#####################}
@@ -327,11 +339,19 @@
     {% else %}
       {% set reward_able = page.reward %}
     {% endif %}
+    
+    <div>
+      {% if not is_index %}
+        {% include 'passage-end-tag.swig' %}
+      {% endif %}
+    </div>
+    
     {% if reward_able and not is_index %}
       <div>
         {% include '../_partials/post/reward.swig' %}
       </div>
     {% endif %}
+    
 
     {% if theme.creative_commons.license and theme.creative_commons.post and not is_index %}
       <div>
@@ -348,13 +368,13 @@
         {% endif %}
         <div class="post-tags">
           {% for tag in post.tags %}
-            <a href="{{ url_for(tag.path) }}" rel="tag">{{ tag_indicate }} {{ tag.name }}</a>
+            <a href="{{ url_for(tag.path) }}" rel="tag"><i class="fa fa-tag"></i> {{ tag.name }}</a>
           {% endfor %}
         </div>
       {% endif %}
 
       {% if not is_index %}
-      {% if theme.rating.enable or (theme.vkontakte_api.enable and theme.vkontakte_api.like) or (theme.facebook_sdk.enable and theme.facebook_sdk.like_button) or theme.likely.enable or (theme.needmoreshare2.enable and theme.needmoreshare2.postbottom.enable) or (theme.baidushare and theme.baidushare.type === "button") %}
+      {% if theme.rating.enable or (theme.vkontakte_api.enable and theme.vkontakte_api.like) or (theme.facebook_sdk.enable and theme.facebook_sdk.like_button) or theme.likely.enable or (theme.needmoreshare2.enable and theme.needmoreshare2.postbottom.enable) %}
         <div class="post-widgets">
         {% if theme.rating.enable %}
           <div class="wp_rating">
@@ -381,7 +401,7 @@
           </div>
         {% endif %}
 
-        {% if theme.likely.enable or (theme.needmoreshare2.enable and theme.needmoreshare2.postbottom.enable) or (theme.baidushare.type === "button") %}
+        {% if theme.likely.enable or (theme.needmoreshare2.enable and theme.needmoreshare2.postbottom.enable) %}
           {% if theme.rating.enable or (theme.vkontakte_api.enable and theme.vkontakte_api.like) or (theme.facebook_sdk.enable and theme.facebook_sdk.like_button) %}
             <span class="post-meta-divider">|</span>
           {% endif %}
@@ -396,11 +416,6 @@
                 <span class="btn">
                   <i class="fa fa-share-alt" aria-hidden="true"></i>
                 </span>
-              </div>
-            {% endif %}
-            {% if theme.baidushare.type === "button" %}
-              <div>
-                {% include '../_partials/share/baidushare.swig' %}
               </div>
             {% endif %}
           </div>
